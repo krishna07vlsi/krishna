@@ -7,35 +7,33 @@ LIC_FILES_CHKSUM = "file://COPYING;beginline=8;md5=3a34942f4ae3fbf1a303160714e66
 
 SRC_URI = "http://curl.haxx.se/download/curl-${PV}.tar.bz2 \
            file://0001-replace-krb5-config-with-pkg-config.patch \
+           file://CVE-2017-1000099.patch \
+           file://CVE-2017-1000100.patch \
+           file://CVE-2017-1000101.patch \
+           file://CVE-2017-1000254.patch \
+"
+
+SRC_URI_append_class-target = " \
+           file://reproducible-mkhelp.patch \
 "
 
 # curl likes to set -g0 in CFLAGS, so we stop it
 # from mucking around with debug options
 #
-SRC_URI += " file://configure_ac.patch \
-             file://CVE-2016-8615.patch \
-             file://CVE-2016-8618.patch \
-             file://CVE-2016-8619.patch \ 
-             file://CVE-2016-8620.patch \
-             file://CVE-2016-8621.patch \
-             file://CVE-2016-8623.patch \
-             file://CVE-2016-8617.patch \
-             file://CVE-2016-8624.patch \
-             file://CVE-2016-9586.patch \
-             file://CVE-2017-1000100.patch \
-             file://CVE-2017-1000101.patch \
-           "
+SRC_URI += " file://configure_ac.patch"
 
-SRC_URI[md5sum] = "015f6a0217ca6f2c5442ca406476920b"
-SRC_URI[sha256sum] = "3c12c5f54ccaa1d40abc65d672107dcc75d3e1fcb38c267484334280096e5156"
+SRC_URI[md5sum] = "6b6eb722f512e7a24855ff084f54fe55"
+SRC_URI[sha256sum] = "fdfc4df2d001ee0c44ec071186e770046249263c491fcae48df0e1a3ca8f25a0"
 
 CVE_PRODUCT = "libcurl"
 inherit autotools pkgconfig binconfig multilib_header
 
-PACKAGECONFIG ??= "${@bb.utils.contains("DISTRO_FEATURES", "ipv6", "ipv6", "", d)} gnutls proxy zlib"
-PACKAGECONFIG_class-native = "ipv6 proxy ssl zlib"
-PACKAGECONFIG_class-nativesdk = "ipv6 proxy ssl zlib"
+PACKAGECONFIG ??= "${@bb.utils.contains("DISTRO_FEATURES", "ipv6", "ipv6", "", d)} gnutls proxy threaded-resolver zlib"
+PACKAGECONFIG_class-native = "ipv6 proxy ssl threaded-resolver zlib"
+PACKAGECONFIG_class-nativesdk = "ipv6 proxy ssl threaded-resolver zlib"
 
+# 'ares' and 'threaded-resolver' are mutually exclusive
+PACKAGECONFIG[ares] = "--enable-ares,--disable-ares,c-ares"
 PACKAGECONFIG[dict] = "--enable-dict,--disable-dict,"
 PACKAGECONFIG[gnutls] = "--with-gnutls,--without-gnutls,gnutls"
 PACKAGECONFIG[gopher] = "--enable-gopher,--disable-gopher,"
@@ -54,16 +52,21 @@ PACKAGECONFIG[smtp] = "--enable-smtp,--disable-smtp,"
 PACKAGECONFIG[ssl] = "--with-ssl --with-random=/dev/urandom,--without-ssl,openssl"
 PACKAGECONFIG[telnet] = "--enable-telnet,--disable-telnet,"
 PACKAGECONFIG[tftp] = "--enable-tftp,--disable-tftp,"
+PACKAGECONFIG[threaded-resolver] = "--enable-threaded-resolver,--disable-threaded-resolver"
 PACKAGECONFIG[zlib] = "--with-zlib=${STAGING_LIBDIR}/../,--without-zlib,zlib"
 PACKAGECONFIG[krb5] = "--with-gssapi,--without-gssapi,krb5"
+PACKAGECONFIG[nghttp2] = "--with-nghttp2,--without-nghttp2,nghttp2"
 
 EXTRA_OECONF = " \
     --enable-crypto-auth \
     --with-ca-bundle=${sysconfdir}/ssl/certs/ca-certificates.crt \
     --without-libmetalink \
     --without-libpsl \
-    --without-nghttp2 \
 "
+
+# see https://lists.yoctoproject.org/pipermail/poky/2013-December/009435.html
+# We should ideally drop ac_cv_sizeof_off_t from site files but until then
+EXTRA_OECONF += "${@bb.utils.contains('DISTRO_FEATURES', 'largefile', 'ac_cv_sizeof_off_t=8', '', d)}"
 
 do_install_append() {
 	oe_multilib_header curl/curlbuild.h
@@ -71,7 +74,11 @@ do_install_append() {
 
 do_install_append_class-target() {
 	# cleanup buildpaths from curl-config
-	sed -i -e 's,${STAGING_DIR_HOST},,g' ${D}${bindir}/curl-config
+	sed -i \
+	    -e 's,--sysroot=${STAGING_DIR_TARGET},,g' \
+	    -e 's,--with-libtool-sysroot=${STAGING_DIR_TARGET},,g' \
+	    -e 's|${DEBUG_PREFIX_MAP}||g' \
+	    ${D}${bindir}/curl-config
 }
 
 PACKAGES =+ "lib${BPN}"
