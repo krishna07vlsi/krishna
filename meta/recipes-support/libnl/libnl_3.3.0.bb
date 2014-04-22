@@ -9,17 +9,16 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=4fbd65380cdd255951079008b364516c"
 
 DEPENDS = "flex-native bison-native"
 
-SRC_URI = "https://github.com/thom311/${BPN}/releases/download/${BPN}${@d.getVar('PV', True).replace('.','_')}/${BP}.tar.gz \
-           file://fix-pktloc_syntax_h-race.patch \
+SRC_URI = "https://github.com/thom311/${BPN}/releases/download/${BPN}3_3_0/${BP}.tar.gz \
            file://fix-pc-file.patch \
-           file://0001-lib-add-utility-function-nl_strerror_l.patch \
-           file://0002-lib-switch-to-using-strerror_l-instead-of-strerror_r.patch \
-           file://0003-src-switch-to-using-strerror_l-instead-of-strerror_r.patch \
-"
+          "
+
 UPSTREAM_CHECK_URI = "https://github.com/thom311/${BPN}/releases"
 
-SRC_URI[md5sum] = "bab12db1eb94a42129f712a44be91a67"
-SRC_URI[sha256sum] = "cd608992c656e8f6e3ab6c1391b162a5a51c49336b9219f7f390e61fc5437c41"
+SRC_URI_append_libc-musl = "file://musl-header-conflict.patch"
+
+SRC_URI[md5sum] = "ab3ef137cad95bdda5ff0ffa5175dfa5"
+SRC_URI[sha256sum] = "705468b5ae4cd1eb099d2d1c476d6a3abe519bc2810becf12fb1e32de1e074e4"
 
 inherit autotools pkgconfig
 
