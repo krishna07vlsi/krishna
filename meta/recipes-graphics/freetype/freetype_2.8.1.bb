@@ -16,17 +16,12 @@ SRC_URI = "${SOURCEFORGE_MIRROR}/freetype/freetype-${PV}.tar.bz2 \
            file://use-right-libtool.patch"
 
 UPSTREAM_CHECK_URI = "http://sourceforge.net/projects/freetype/files/freetype2/"
-UPSTREAM_CHECK_REGEX = "(?P<pver>\d+(\.\d+)+)"
+UPSTREAM_CHECK_REGEX = "freetype-(?P<pver>\d+(\.\d+)+)"
 
-SRC_URI[md5sum] = "6a386964e18ba28cb93370e57a19031b"
-SRC_URI[sha256sum] = "e20a6e1400798fd5e3d831dd821b61c35b1f9a6465d6b18a53a9df4cf441acf0"
+SRC_URI[md5sum] = "bf0a210b6fe781228fa0e4a80691a521"
+SRC_URI[sha256sum] = "e5435f02e02d2b87bb8e4efdcaa14b1f78c9cf3ab1ed80f94b6382fb6acc7d78"
 
 inherit autotools pkgconfig binconfig-disabled multilib_header
-
-# Adapt autotools to work with the minimal autoconf usage in freetype
-AUTOTOOLS_SCRIPT_PATH = "${S}/builds/unix"
-CONFIGURE_SCRIPT = "${S}/configure"
-EXTRA_AUTORECONF += "--exclude=autoheader --exclude=automake"
 
 PACKAGECONFIG ??= "zlib"
 
@@ -40,10 +35,23 @@ EXTRA_OECONF = "CC_BUILD='${BUILD_CC}'"
 
 TARGET_CPPFLAGS += "-D_FILE_OFFSET_BITS=64"
 
+do_configure() {
+	# Need this because although the autotools infrastructure is in
+	# builds/unix the configure script get written to ${S}, so we can't
+	# just use AUTOTOOLS_SCRIPT_PATH.
+	cd ${S}/builds/unix
+	libtoolize --force --copy
+	aclocal -I .
+	gnu-configize --force
+	autoconf
+	cd ${B}
+	oe_runconf
+}
+
 do_install_append() {
 	oe_multilib_header freetype2/freetype/config/ftconfig.h
 }
 
 BINCONFIG = "${bindir}/freetype-config"
 
-BBCLASSEXTEND = "native nativesdk"
+BBCLASSEXTEND = "native"
