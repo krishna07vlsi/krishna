@@ -12,8 +12,8 @@ DEPENDS = "glib-2.0 cairo fontconfig freetype"
 
 SRC_URI = "http://www.freedesktop.org/software/harfbuzz/release/${BP}.tar.bz2"
 
-SRC_URI[md5sum] = "a82d49ff67197bc3c96ea34b98880c52"
-SRC_URI[sha256sum] = "b04be31633efee2cae1d62d46434587302554fa837224845a62565ec68a0334d"
+SRC_URI[md5sum] = "c7476d8b989869d8b95b37fa53add6bf"
+SRC_URI[sha256sum] = "b5d6ac8415f97f3540d73f3f91c41c5c10f8a4d76350f11a7184062aae88ac0b"
 
 inherit autotools pkgconfig lib_package gtk-doc
 
@@ -31,6 +31,7 @@ EXTRA_OECONF = " \
 PACKAGES =+ "${PN}-icu ${PN}-icu-dev"
 
 FILES_${PN}-icu = "${libdir}/libharfbuzz-icu.so.*"
+FILES_${PN}-icu-dbg = "${libdir}/.debug/libharfbuzz-icu.so*"
 FILES_${PN}-icu-dev = "${libdir}/libharfbuzz-icu.la \
                        ${libdir}/libharfbuzz-icu.so \
                        ${libdir}/pkgconfig/harfbuzz-icu.pc \
