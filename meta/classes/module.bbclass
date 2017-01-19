@@ -17,6 +17,10 @@ python __anonymous () {
     d.setVar('KBUILD_EXTRA_SYMBOLS', " ".join(extra_symbols))
 }
 
+# Ensure one recipe isn't running do_make_scripts whilst another is using those
+# scripts in do_compile.
+do_compile[lockfiles] = "${TMPDIR}/kernel-scripts.lock"
+
 module_do_compile() {
 	unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS
 	oe_runmake KERNEL_PATH=${STAGING_KERNEL_DIR}   \
