@@ -21,7 +21,7 @@ FL_FOR_ARCH7VE, rather than re-creating the armv7ve flags
 independently by combining FL_FOR_ARCH7A with the armv7ve specific
 FL_THUMB_DIV and FL_ARM_DIV flags.
 
-UpStream-Status: Backport
+Upstream-Status: Backport
 
 git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-6-branch@254584 138bc75d-0d04-0410-961f-82ee72b054a4
 

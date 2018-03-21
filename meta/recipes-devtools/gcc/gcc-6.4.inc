@@ -71,7 +71,7 @@ SRC_URI = "\
            file://0038-Search-target-sysroot-gcc-version-specific-dirs-with.patch \
            file://0039-Fix-various-_FOR_BUILD-and-related-variables.patch \
            file://0040-nios2-Define-MUSL_DYNAMIC_LINKER.patch \
-           file://0041-ssp_nonshared.patch \
+           file://0041-Add-ssp_nonshared-to-link-commandline-for-musl-targe.patch \
            file://0042-gcc-libcpp-support-ffile-prefix-map-old-new.patch \
            file://0043-Reuse-fdebug-prefix-map-to-replace-ffile-prefix-map.patch \
            file://0044-gcc-final.c-fdebug-prefix-map-support-to-remap-sourc.patch \
@@ -88,7 +88,20 @@ BACKPORTS = "\
            file://CVE-2016-6131.patch \
            file://0057-ARM-PR-82445-suppress-32-bit-aligned-ldrd-strd-peeph.patch \
            file://0001-enable-FL_LPAE-flag-for-armv7ve-cores.patch \
+           file://0001-i386-Move-struct-ix86_frame-to-machine_function.patch \
+           file://0002-i386-Use-reference-of-struct-ix86_frame-to-avoid-cop.patch \
+           file://0003-i386-Use-const-reference-of-struct-ix86_frame-to-avo.patch \
+           file://0004-x86-Add-mindirect-branch.patch \
+           file://0005-x86-Add-mfunction-return.patch \
+           file://0006-x86-Add-mindirect-branch-register.patch \
+           file://0007-x86-Add-V-register-operand-modifier.patch \
+           file://0008-x86-Disallow-mindirect-branch-mfunction-return-with-.patch \
+           file://0009-Use-INVALID_REGNUM-in-indirect-thunk-processing.patch \
+           file://0010-i386-Pass-INVALID_REGNUM-as-invalid-register-number.patch \
+           file://0011-i386-Update-mfunction-return-for-return-with-pop.patch \
+           file://0012-i386-Add-TARGET_INDIRECT_BRANCH_REGISTER.patch \
 "
+
 SRC_URI[md5sum] = "11ba51a0cfb8471927f387c8895fe232"
 SRC_URI[sha256sum] = "850bf21eafdfe5cd5f6827148184c08c4a0852a37ccf36ce69855334d2c914d4"
 
