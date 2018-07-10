@@ -15,7 +15,9 @@ SRC_URI = "https://github.com/thom311/${BPN}/releases/download/${BPN}3_3_0/${BP}
 
 UPSTREAM_CHECK_URI = "https://github.com/thom311/${BPN}/releases"
 
-SRC_URI_append_libc-musl = "file://musl-header-conflict.patch"
+SRC_URI_append_libc-musl = "file://musl-header-conflict.patch \
+                            file://musl-redefination-error.patch \
+                           "
 
 SRC_URI[md5sum] = "ab3ef137cad95bdda5ff0ffa5175dfa5"
 SRC_URI[sha256sum] = "705468b5ae4cd1eb099d2d1c476d6a3abe519bc2810becf12fb1e32de1e074e4"
