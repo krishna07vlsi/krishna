@@ -3,9 +3,9 @@
 
 require musl.inc
 
-SRCREV = "eb03bde2f24582874cb72b56c7811bf51da0c817"
+SRCREV = "9cad27a3dc1a4eb349b6591e4dc8cc89dce32277"
 
-PV = "1.1.18+git${SRCPV}"
+PV = "1.1.19+git${SRCPV}"
 
 # mirror is at git://github.com/kraj/musl.git
 
@@ -15,13 +15,14 @@ SRC_URI = "git://git.musl-libc.org/musl \
 
 S = "${WORKDIR}/git"
 
-PROVIDES += "virtual/libc virtual/${TARGET_PREFIX}libc-for-gcc virtual/libiconv virtual/libintl"
+PROVIDES += "virtual/libc virtual/${TARGET_PREFIX}libc-for-gcc virtual/libiconv virtual/libintl virtual/crypt"
 
 DEPENDS = "virtual/${TARGET_PREFIX}binutils \
            virtual/${TARGET_PREFIX}gcc-initial \
            libgcc-initial \
            linux-libc-headers \
            bsd-headers \
+           libssp-nonshared \
           "
 
 export CROSS_COMPILE="${TARGET_PREFIX}"
@@ -65,7 +66,7 @@ do_install() {
 	done
 }
 
-RDEPENDS_${PN}-dev += "linux-libc-headers-dev bsd-headers-dev"
+RDEPENDS_${PN}-dev += "linux-libc-headers-dev bsd-headers-dev libssp-nonshared-staticdev"
 RPROVIDES_${PN}-dev += "libc-dev virtual-libc-dev"
 RPROVIDES_${PN} += "ldd libsegfault rtld(GNU_HASH)"
 
