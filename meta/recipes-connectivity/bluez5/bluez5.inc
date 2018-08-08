@@ -101,7 +101,7 @@ do_install_append() {
 	sed -i -e '1s,#!.*python.*,#!${bindir}/python3,' ${D}${libdir}/bluez/test/*
 }
 
-PACKAGES =+ "${PN}-testtools ${PN}-obex ${PN}-noinst-tools"
+PACKAGES =+ "${PN}-testtools ${PN}-obex ${PN}-noinst-tools ${PN}-bluetoothd ${PN}-mpris-proxy"
 
 FILES_${PN} += " \
     ${libdir}/bluetooth/plugins/*.so \
@@ -113,9 +113,13 @@ FILES_${PN}-dev += " \
 "
 
 FILES_${PN}-obex = "${libexecdir}/bluetooth/obexd \
+                    ${libdir}/bluez5/bluetooth/obexd \
                     ${exec_prefix}/lib/systemd/user/obex.service \
                     ${datadir}/dbus-1/services/org.bluez.obex.service \
                    "
+
+FILES_${PN}-bluetoothd = "${libdir}/bluez5/bluetooth/bluetoothd"
+FILES_${PN}-mpris-proxy = "${bindir}/mpris-proxy"
 SYSTEMD_SERVICE_${PN}-obex = "obex.service"
 
 FILES_${PN}-testtools = "${libdir}/bluez/test/*"
