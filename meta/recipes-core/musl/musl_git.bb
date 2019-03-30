@@ -3,9 +3,9 @@
 
 require musl.inc
 
-SRCREV = "9cad27a3dc1a4eb349b6591e4dc8cc89dce32277"
+SRCREV = "1691b23955590d1eb66a11158fdd91c86337e886"
 
-PV = "1.1.19+git${SRCPV}"
+PV = "1.1.21+git${SRCPV}"
 
 # mirror is at git://github.com/kraj/musl.git
 
