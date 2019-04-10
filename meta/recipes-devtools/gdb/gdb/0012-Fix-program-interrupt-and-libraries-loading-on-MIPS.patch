@@ -1,0 +1,49 @@
+From 9f00b52ed352c6be2a1c8337c62b4f68c8f36b29 Mon Sep 17 00:00:00 2001
+From: Eugene Mutavchi <Ievgen_Mutavchi@comcast.com>
+Date: Wed, 10 Apr 2019 11:32:45 -0400
+Subject: [PATCH] Fix program interrupt and libraries loading on MIPS
+
+---
+ gdb/gdbserver/linux-low.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/gdb/gdbserver/linux-low.c b/gdb/gdbserver/linux-low.c
+index 983b2d1..488360d 100644
+--- a/gdb/gdbserver/linux-low.c
++++ b/gdb/gdbserver/linux-low.c
+@@ -5760,7 +5760,9 @@ linux_request_interrupt (void)
+ 
+   /* Send a SIGINT to the process group.  This acts just like the user
+      typed a ^C on the controlling terminal.  */
+-  kill (-signal_pid, SIGINT);
++  int r = kill (-signal_pid, SIGINT);
++  if (r != 0)
++      kill (signal_pid, SIGINT);
+ }
+ 
+ /* Copy LEN bytes from inferior's auxiliary vector starting at OFFSET
+@@ -6732,7 +6734,10 @@ get_r_debug (const int pid, const int is_elf64)
+ 	    {
+ 	      if (linux_read_memory (dyn->d_un.d_val,
+ 				     rld_map.buf, sizeof (rld_map.buf)) == 0)
++            {
++              if (rld_map.map)
+ 		return rld_map.map;
++            }
+ 	      else
+ 		break;
+ 	    }
+@@ -6742,7 +6747,10 @@ get_r_debug (const int pid, const int is_elf64)
+ 	    {
+ 	      if (linux_read_memory (dyn->d_un.d_val + dynamic_memaddr,
+ 				     rld_map.buf, sizeof (rld_map.buf)) == 0)
++            {
++              if (rld_map.map)
+ 		return rld_map.map;
++            }
+ 	      else
+ 		break;
+ 	    }
+-- 
+2.7.4
+
