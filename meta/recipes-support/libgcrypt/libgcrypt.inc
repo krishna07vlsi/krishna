@@ -28,7 +28,8 @@ BINCONFIG = "${bindir}/libgcrypt-config"
 
 inherit autotools texinfo binconfig-disabled pkgconfig
 
-EXTRA_OECONF = "--disable-asm --with-capabilities"
+//EXTRA_OECONF = "--disable-asm --with-capabilities"
+EXTRA_OECONF = "--disable-asm"
 
 do_configure_prepend () {
 	# Else this could be used in preference to the one in aclocal-copy
