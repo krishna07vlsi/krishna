@@ -134,7 +134,10 @@ python externalsrc_configure_prefunc() {
             elif os.path.exists(lnkfile):
                 # File/dir exists with same name as link, just leave it alone
                 continue
-            os.symlink(target, lnkfile)
+            try:
+                os.symlink(target, lnkfile)
+            except FileExistsError:
+                bb.note("Symlink %s already exists fo external source" % lnkfile)
 }
 
 python externalsrc_compile_prefunc() {
