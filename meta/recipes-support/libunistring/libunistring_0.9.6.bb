@@ -13,7 +13,9 @@ DESCRIPTION = "Text files are nowadays usually encoded in Unicode, and may\
 
 HOMEPAGE = "http://www.gnu.org/software/libunistring/"
 SECTION = "devel"
-LICENSE = "GPLv3 & LGPLv3"
+#LICENSE = "GPLv3 & LGPLv3"
+#Added for to resolve Libunistring component compailation error
+LICENSE = "LGPLv3+ | GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
                     file://COPYING.LIB;md5=6a6a8e020838b23406c81b19c1d46df6"
 

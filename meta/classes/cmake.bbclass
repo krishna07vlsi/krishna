@@ -83,6 +83,10 @@ list(APPEND CMAKE_MODULE_PATH "${STAGING_DATADIR}/cmake/Modules/")
 
 # add for non /usr/lib libdir, e.g. /usr/lib64
 set( CMAKE_LIBRARY_PATH ${libdir} ${base_libdir})
+#Added for ccsp-getdns component compilaton flags
+set( THREADS_PTHREAD_ARG "0" CACHE STRING "Result from TRY_RUN" FORCE )
+set( STRPTIME_WORKS_EXITCODE "0" CACHE STRING "Result from TRY_RUN" FORCE )
+option(BUILD_STUBBY "Compile and install stubby, the (stub) resolver daemon." ON)
 
 EOF
 }
